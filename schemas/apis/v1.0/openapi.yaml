@@ -1,0 +1,182 @@
+﻿openapi: 3.0.3
+info:
+  title: User Management API Specification
+  version: 1.0.0
+  license:
+    name: MIT
+    url: https://opensource.org/license/mit/
+servers:
+  - url: http://localhost:5289
+    description: Development Server
+tags:
+  - name: User
+    description: User
+components:
+  schemas:
+    User:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+        name:
+          $ref: '#/components/schemas/UserName'
+        contact:
+          $ref: '#/components/schemas/UserContact'
+    UserName:
+      type: object
+      properties:
+        first:
+          type: string
+        middle:
+          type: string
+        last:
+          type: string
+        display:
+          type: string
+    UserContact:
+      type: object
+      properties:
+        emails:
+          type: array
+          items:
+            $ref: '#/components/schemas/Email'
+    Email:
+      type: object
+      required:
+        - address
+      properties:
+        address:
+          type: string
+        description:
+          type: string
+    UserListGetResponse:
+      type: object
+      required:
+        - totalCount
+        - count
+        - users
+      properties:
+        totalCount:
+          type: integer
+          format: int64
+        count:
+          type: integer
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+    UserGetResponse:
+      allOf:
+        - $ref: '#/components/schemas/User'
+    UserCreateResponse:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+    UserUpdateRequest:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/UserName'
+        contact:
+          $ref: '#/components/schemas/UserContact'
+paths:
+  /users:
+    get:
+      tags:
+        - User
+      summary: Retrieves a list of user.
+      operationId: getUserList
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserListGetResponse'
+        '503':
+          description: Service Unavailable
+    post:
+      tags:
+        - User
+      summary: Create a new user.
+      operationId: createUser
+      responses:
+        '201':
+          headers:
+            Location:
+              schema:
+                type: string
+                format: uri
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserCreateResponse'
+        '409':
+          description: Conflict
+        '503':
+          description: Service Unavailable
+  /users/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      tags:
+        - User
+      summary: Retrieves a user.
+      operationId: getUser
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserGetResponse'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+        '503':
+          description: Service Unavailable
+    patch:
+      tags:
+        - User
+      summary: Create or update the properties of a user.
+      operationId: updateUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdateRequest'
+      responses:
+        '202':
+          description: Accepted
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+        '409':
+          description: Conflict
+        '503':
+          description: Service Unavailable
+    delete:
+      tags:
+        - User
+      summary: Delete a user.
+      operationId: deleteUser
+      responses:
+        '202':
+          description: Accepted
+        '404':
+          description: Not Found
+        '503':
+          description: Service Unavailable
