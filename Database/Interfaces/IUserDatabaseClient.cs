@@ -14,7 +14,7 @@ namespace UserManagementApi.Database.Interfaces
         public Task<int> SetNameAsync(Name name);
         public Task<int> CreateEmailAsync(Email email);
         public Task<List<Email>> GetEmailListAsync(long itemId);
-        public Task<List<ListItem>> GetUserListAsync(Guid guid, int limit);
-        public Task<long> GetTotalCount();
+        public Task<List<ListItem>> GetListAsync(Guid guid, int limit);
+        public Task<long> GetTotalCountAsync();
     }
 }

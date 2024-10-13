@@ -296,7 +296,7 @@ namespace UserManagementApi.Database.Clients.Postgres
             return emails;
         }
 
-        public async Task<List<ListItem>> GetUserListAsync(Guid guid, int limit)
+        public async Task<List<ListItem>> GetListAsync(Guid guid, int limit)
         {
             limit = Math.Min(Math.Max(limit, 1), 128);
 
@@ -357,7 +357,7 @@ namespace UserManagementApi.Database.Clients.Postgres
             return items;
         }
 
-        public async Task<long> GetTotalCount()
+        public async Task<long> GetTotalCountAsync()
         {
             await _connection.OpenIfClosedAsync();
 

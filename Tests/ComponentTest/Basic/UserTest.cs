@@ -48,7 +48,7 @@ namespace ComponentTest.Basic
         {
             try
             {
-                UserCreateResponse? response = await _client.Users.PostAsync();
+                var response = await _client.Users.PostAsync();
                 if (response is null)
                 {
                     Assert.Fail("Failed to get response.");
@@ -72,7 +72,7 @@ namespace ComponentTest.Basic
         {
             try
             {
-                UserListGetResponse? response = await _client.Users.GetAsUserListGetResponseAsync();
+                var response = await _client.Users.GetAsUserListGetResponseAsync();
                 if (response is null)
                 {
                     Assert.Fail("Failed to get response.");
@@ -99,7 +99,7 @@ namespace ComponentTest.Basic
             string id;
             try
             {
-                UserCreateResponse? response = await _client.Users.PostAsync();
+                var response = await _client.Users.PostAsync();
                 if ((response is null) ||
                     string.IsNullOrEmpty(response.Id))
                 {
@@ -116,8 +116,7 @@ namespace ComponentTest.Basic
 
             try
             {
-                UserGetResponse? response;
-                response = await _client.Users[id].GetAsUserGetResponseAsync();
+                var response = await _client.Users[id].GetAsUserGetResponseAsync();
                 if (response is null)
                 {
                     Assert.Fail("Failed to get response.");
@@ -170,7 +169,7 @@ namespace ComponentTest.Basic
             string id;
             try
             {
-                UserCreateResponse? response = await _client.Users.PostAsync();
+                var response = await _client.Users.PostAsync();
                 if ((response is null) ||
                     string.IsNullOrEmpty(response.Id))
                 {
@@ -185,20 +184,21 @@ namespace ComponentTest.Basic
                 return;
             }
 
-            UserName userName = new()
-            {
-                First = "Test",
-                Middle = "M",
-                Last = "User",
-                Display = "Test User"
-            };
+            UserName userName;
             try
             {
                 UserUpdateRequest request = new()
                 {
-                    Name = userName
+                    Name = new()
+                    {
+                        First = "Test",
+                        Middle = "M",
+                        Last = "User",
+                        Display = "Test User"
+                    }
                 };
                 await _client.Users[id].PatchAsync(request);
+                userName = request.Name;
             }
             catch (Exception exception)
             {
@@ -208,8 +208,7 @@ namespace ComponentTest.Basic
 
             try
             {
-                UserGetResponse? response;
-                response = await _client.Users[id].GetAsUserGetResponseAsync();
+                var response = await _client.Users[id].GetAsUserGetResponseAsync();
                 if (response is null)
                 {
                     Assert.Inconclusive();
@@ -233,7 +232,7 @@ namespace ComponentTest.Basic
             string id;
             try
             {
-                UserCreateResponse? response = await _client.Users.PostAsync();
+                var response = await _client.Users.PostAsync();
                 if ((response is null) ||
                     string.IsNullOrEmpty(response.Id))
                 {
@@ -288,8 +287,7 @@ namespace ComponentTest.Basic
 
             try
             {
-                UserGetResponse? response;
-                response = await _client.Users[id].GetAsUserGetResponseAsync();
+                var response = await _client.Users[id].GetAsUserGetResponseAsync();
                 if (response is null)
                 {
                     Assert.Inconclusive();
@@ -344,7 +342,7 @@ namespace ComponentTest.Basic
             string id;
             try
             {
-                UserCreateResponse? response = await _client.Users.PostAsync();
+                var response = await _client.Users.PostAsync();
                 if ((response is null) ||
                     string.IsNullOrEmpty(response.Id))
                 {
