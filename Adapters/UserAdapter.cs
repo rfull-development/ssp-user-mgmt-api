@@ -192,7 +192,7 @@ namespace UserManagementApi.Adapters
             return emails;
         }
 
-        public async Task<List<User>> GetUserListAsync(string? id, int limit)
+        public async Task<List<User>> GetListAsync(string? id, int limit)
         {
             Guid dbGuid;
             if (id != null)
@@ -207,7 +207,7 @@ namespace UserManagementApi.Adapters
                 dbGuid = Guid.Empty;
             }
 
-            List<Database.Models.ListItem> dbItems = await _client.GetUserListAsync(dbGuid, limit);
+            List<Database.Models.ListItem> dbItems = await _client.GetListAsync(dbGuid, limit);
             List<User> users = [];
             foreach (var dbItem in dbItems)
             {
@@ -232,7 +232,7 @@ namespace UserManagementApi.Adapters
 
         public async Task<long> GetTotalCountAsync()
         {
-            long count = await _client.GetTotalCount();
+            long count = await _client.GetTotalCountAsync();
             return count;
         }
     }

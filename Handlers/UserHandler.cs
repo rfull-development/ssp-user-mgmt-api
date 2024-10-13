@@ -31,7 +31,7 @@ namespace UserManagementApi.Handlers
                 DatabaseClientFactory databaseClientFactory = new();
                 using var databaseClient = databaseClientFactory.CreateUserDatabaseClient();
                 UserAdapter adapter = new(databaseClient);
-                users = await adapter.GetUserListAsync(startId, limit);
+                users = await adapter.GetListAsync(startId, limit);
                 totalCount = await adapter.GetTotalCountAsync();
             }
             catch (ArgumentException)
