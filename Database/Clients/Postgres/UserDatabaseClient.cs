@@ -198,7 +198,7 @@ namespace UserManagementApi.Database.Clients.Postgres
                 string table = GetTableName<Name>();
                 string updateSet = GenerateUpdateSetListQuery(name, [
                     nameof(Name.ItemId),
-                nameof(Name.Version)
+                    nameof(Name.Version)
                     ]);
                 string query = $"""
                 UPDATE {table}
