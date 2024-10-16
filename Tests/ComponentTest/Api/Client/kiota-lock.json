@@ -2,7 +2,7 @@
   "descriptionHash": "DEA89A5DC6C0D53FC6ABE58EFA07F54151686D71C1CC76ED3FCF4FE833BB7AF47732CE9A66DC72F9587043092680218B64B1F267CBDB89AD50FFC983F11EA481",
   "descriptionLocation": "../../../../schemas/apis/v1.0/openapi.yaml",
   "lockFileVersion": "1.0.0",
-  "kiotaVersion": "1.19.0",
+  "kiotaVersion": "1.19.1",
   "clientClassName": "ApiClient",
   "typeAccessModifier": "Public",
   "clientNamespaceName": "Api.Client",
