@@ -1,108 +1,178 @@
-openapi: 3.0.3
+﻿openapi: 3.0.3
 info:
-  title: API Specification
+  title: User Management API Specification
   version: 1.0.0
   license:
     name: MIT
     url: https://opensource.org/license/mit/
 servers:
-  - url: http://localhost:5000
+  - url: http://localhost:5289
     description: Development Server
 tags:
-  - name: item
+  - name: User
+    description: User
 components:
   schemas:
-    Data:
+    User:
       type: object
-      properties:
-        name:
-          type: string
-    DataGetResponse:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Data'
-    DataPostRequest:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Data'
-    DataPostResponse:
-      type: object
+      required:
+        - id
       properties:
         id:
           type: string
-  securitySchemes:
-    apiKey:
-      type: apiKey
-      in: header
-      name: API-ACCESS-KEY
-    basicAuth:
-      type: http
-      scheme: basic
+        name:
+          $ref: '#/components/schemas/UserName'
+    UserName:
+      type: object
+      properties:
+        first:
+          type: string
+        middle:
+          type: string
+        last:
+          type: string
+        display:
+          type: string
+    UserListGetResponse:
+      type: object
+      required:
+        - totalCount
+        - count
+        - users
+      properties:
+        totalCount:
+          type: integer
+          format: int64
+        count:
+          type: integer
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+    UserGetResponse:
+      allOf:
+        - $ref: '#/components/schemas/User'
+    UserCreateResponse:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+    UserUpdateRequest:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/UserName'
 paths:
-  /{name}:
+  /users:
+    get:
+      tags:
+        - User
+      summary: Retrieves a list of user.
+      operationId: getUserList
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserListGetResponse'
+              example:
+                totalCount: 1
+                count: 1
+                users:
+                  - id: ID String
+                    name:
+                      display: Display Name
+        '503':
+          description: Service Unavailable
+    post:
+      tags:
+        - User
+      summary: Create a new user.
+      operationId: createUser
+      responses:
+        '201':
+          headers:
+            Location:
+              schema:
+                type: string
+                format: uri
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserCreateResponse'
+              example:
+                id: ID String
+        '409':
+          description: Conflict
+        '503':
+          description: Service Unavailable
+  /users/{id}:
     parameters:
-      - in: path
+      - name: id
+        in: path
         required: true
-        name: name
-        description: description
         schema:
           type: string
     get:
       tags:
-        - item
-      summary: summary of get
-      description: description
-      operationId: getData
-      security:
-        - apiKey: []
-        - basicAuth: []
-      parameters:
-        - name: query
-          in: query
-          description: description
-          required: false
-          schema:
-            type: string
+        - User
+      summary: Retrieves a user.
+      operationId: getUser
       responses:
         '200':
-          description: success
+          description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DataGetResponse'
-    post:
+                $ref: '#/components/schemas/UserGetResponse'
+              example:
+                id: ID String
+                name:
+                  first: First Name
+                  middle: Middle Name
+                  last: Last Name
+                  display: Display Name
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+        '503':
+          description: Service Unavailable
+    patch:
       tags:
-        - item
-      summary: summary of post
-      description: description
-      operationId: postData
-      security:
-        - apiKey: []
-        - basicAuth: []
-      parameters:
-        - name: query
-          in: query
-          description: description
-          required: false
-          schema:
-            type: string
+        - User
+      summary: Create or update the properties of a user.
+      operationId: updateUser
       requestBody:
-        description: description
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/DataPostRequest'
+              $ref: '#/components/schemas/UserUpdateRequest'
       responses:
-        '200':
-          description: success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DataPostResponse'
+        '202':
+          description: Accepted
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+        '409':
+          description: Conflict
+        '503':
+          description: Service Unavailable
+    delete:
+      tags:
+        - User
+      summary: Delete a user.
+      operationId: deleteUser
+      responses:
+        '202':
+          description: Accepted
+        '404':
+          description: Not Found
+        '503':
+          description: Service Unavailable
